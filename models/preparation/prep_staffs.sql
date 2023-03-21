@@ -28,3 +28,5 @@ with staffs as(
 )
 
 select * from final
+
+select * from dbt_exercise.bike_shop.staff
