@@ -1,0 +1,3 @@
+packages:
+  - package: jmangroup/data_profiler
+    version: 1.0.0
