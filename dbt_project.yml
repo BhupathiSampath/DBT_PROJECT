@@ -42,3 +42,6 @@ models:
     transformation:
       +materialized: table
       schema: transformation
+    data_mart:
+      +materialized: table
+      schema: data_mart

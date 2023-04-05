@@ -1,0 +1,16 @@
+
+version: 2
+
+models:
+    - name: customers_product_orders_01
+      description: "This is the first KPI that shows how many products does each customer order monthly, half-yearly and yearly"
+    - name: prportion_new_customers_revenue_02
+      description: "This is 2nd KPI shows what proportion of customers are new, and for what proportion of revenue do they accoun"
+    - name: delivery_days_03
+      description: "This is 3rd KPI shows How long does it take to deliver products"
+    - name: category_revenue_04
+      description: "This is 4th KPI that shows How much revenue is generated each month, based on product category"
+    - name: interplay_revenue_discounts_05
+      description: "This is 5th KPI that shows that What is the overall effect of the discounted prices on revenue? (i.e. what’s the interplay between reduced prices and increased orders due to those reduced prices?)"
+    - name: staff_performance
+      description: 

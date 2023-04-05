@@ -1,18 +1,12 @@
-{{
-  config(
-    materialized='table'
-  )
-}}
-
-with product as(
-    select
-        CAST(product_id as VARCHAR) as product_id,
-        CAST(product_name as VARCHAR) as product_name,
-        CAST(brand_id as VARCHAR) as brand_id,
-        CAST(category_id as VARCHAR) as category_id,
+WITH product AS(
+    SELECT
+        CAST(product_id AS VARCHAR) AS product_id,
+        CAST(product_name AS VARCHAR) AS product_name,
+        CAST(brand_id AS VARCHAR) AS brand_id,
+        CAST(category_id AS VARCHAR) AS category_id,
         list_price,
-        CAST(model_year as VARCHAR) as model_year
-    from dbt_exercise.bike_shop.products
+        CAST(model_year AS VARCHAR) AS model_year
+    FROM {{ source('training','products') }}
 )
 
-select * from product
+SELECT * FROM product

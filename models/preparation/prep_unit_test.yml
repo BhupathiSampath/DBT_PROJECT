@@ -1,0 +1,130 @@
+
+version: 2
+
+models:
+    - name: prep_orders
+      description: > 
+        orders table is a database table that contains information about orders placed by customers. 
+        Each row in the table represents a single order and includes various attributes related to the order 
+        such as order ID, customer ID, order date, order status, shipping information.
+      columns:
+          - name: order_id
+            description: "The primary key for this table"
+            tests:
+                - unique
+                - not_null
+          - name: order_status
+            description: "only accepts below listed values"
+            tests:
+                - accepted_values:
+                    values:
+                      - 1
+                      - 2
+                      - 3
+                      - 4
+                - not_null
+
+    - name: order_items
+      description: >
+        The order_items table is a database table that contains information about the individual items that are 
+        included in each order. Each row in the table represents a single item within an order and includes 
+        various attributes related to the item such as order item ID, order ID, product ID, quantity ordered, 
+        unit price, and any applicable discounts.
+      columns:
+          - name: item_id
+            tests:
+                - not_null
+    - name: prep_customers
+      description: >
+        The prep_customers table is a table that contains information about individual customers who have 
+        made a purchased an product. Each row in the table represents a single customer and includes various 
+        attributes related to the customer such as customer ID, first name, last name, email address
+        and phone number.
+      columns:
+          - name: customer_id
+            description: "The primary key for this table"
+            tests:
+                - unique
+                - not_null
+    - name: prep_products
+      description: >
+        The "products" table is a database table that contains information about the products that are 
+        available for sale. Each row in the table represents a single product and includes various attributes 
+        related to the product such as product ID, product name and unit price.
+      columns:
+          - name: product_id
+            description: "The primary key for this table"
+            tests:
+                - unique
+                - not_null
+    - name: prep_stock
+      description: >
+        The "Stocks" table is a database table that contains information about the products 
+        and its quantity and wich store its coming from.
+      columns:
+          - name: store_id
+            description: "Store ID of each store"
+            tests:
+                - not_null
+          - name: product_id
+            tests:
+                - not_null
+    - name: prep_staffs
+      description: >
+        "prep_staffs" table that stores information about employees or staff members of an organization. 
+        The table will usually include columns for each employee's name, job title, department,
+        email address, phone number.
+      columns:
+          - name: staff_id
+            description: "The primary key for this table"
+            tests:
+                - unique
+                - not_null
+          - name: store_id
+            tests:
+                - not_null
+    - name: prep_store
+      description: >
+        "prep_store" table that stores information about retail stores or locations for a 
+        particular business or organization. The table will usually include columns for the 
+        store name, address, phone number, and other relevant information such as store hours, 
+        store manager's name, and inventory levels.
+      columns:
+          - name: store_id
+            description: "The primary key for this table"
+            tests:
+                - unique
+                - not_null
+          - name: store_name
+            tests:
+                - not_null
+    - name: prep_brand
+      description: >
+        "prep_brand" refers to a database table that stores information about a company's brands. 
+        The table will usually include columns for the brand name, description.
+      columns:
+          - name: brand_id
+            description: "The primary key for this table"
+            tests:
+                - unique
+                - not_null
+          - name: brand_name
+            tests:
+                - unique
+                - not_null
+    - name: prep_category
+      description: >
+        The category table typically stores information about the categories of products that a 
+        business sells or deals with. The purpose of the category table is to organize products 
+        into logical groups and provide a way to filter or search for products based on these 
+        categories.
+      columns:
+          - name: category_id
+            description: "The primary key for this table"
+            tests:
+                - unique
+                - not_null
+          - name: category_name
+            tests:
+                - unique
+                - not_null

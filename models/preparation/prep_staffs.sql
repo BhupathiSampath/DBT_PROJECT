@@ -1,32 +1,24 @@
-{{
-  config(
-    materialized='table'
-  )
-}}
-
-with staffs as(
-    select 
+with staffs AS(
+    SELECT 
         STAFF_ID,
-        " FIRST_NAME" as FIRST_NAME,
-        " LAST_NAME" as LAST_NAME,
-        " EMAIL" as EMAIL,
-        " PHONE" as PHONE,
-        " ACTIVE" as ACTIVE,
-        " STORE_ID" as STORE_ID,
-        " MANAGER_ID" as MANAGER_ID
-    from dbt_exercise.bike_shop.staff
-), final as(
-    select 
-        cast(staff_id as varchar) as staff_id,
-        cast(store_id as varchar) as store_id,
-        cast(manager_id as varchar) as manager_id,
+        FIRST_NAME,
+        LAST_NAME,
+        EMAIL,
+        PHONE,
+        ACTIVE,
+        STORE_ID,
+        MANAGER_ID
+    FROM {{ source('training','staff') }}
+), final AS(
+    SELECT 
+        cast(staff_id AS varchar) AS staff_id,
+        cast(store_id AS varchar) AS store_id,
+        cast(manager_id AS varchar) AS manager_id,
         first_name,
         last_name,
         email,
         phone
-    from staffs
+    FROM staffs
 )
 
-select * from final
-
-select * from dbt_exercise.bike_shop.staff
+SELECT * FROM final

@@ -1,16 +1,31 @@
-with product as(
+WITH product AS(
     select 
-        p.product_id, p.product_name, count(oi.order_id) as orders, rank() over (order by orders desc) as order_rank
-    from BIKE_SHOP_PREPERATION.prep_products as p left join BIKE_SHOP_PREPERATION.order_items as oi
-    on p.product_id=oi.product_id group by p.product_id, p.product_name order by orders desc
+        p.product_id, p.product_name, COUNT(oi.order_id) AS orders, RANK() OVER (ORDER BY orders DESC) AS order_rank
+    FROM {{ ref('dim_products') }} AS p left join {{ ref('fact_order_items') }} AS oi
+    ON p.product_id=oi.product_id GROUP BY p.product_id, p.product_name ORDER BY orders DESC
+),
+
+cte AS (
+  SELECT MIN(order_rank) AS min_number, MAX(order_rank) AS max_number
+  FROM product
+),
+final AS (
+    SELECT 
+        product_id, 
+        product_name, 
+        orders AS total_orders,
+        order_rank
+    FROM product
+    WHERE order_rank = (SELECT min_number FROM cte)
+    OR order_rank = (SELECT max_number FROM cte)
 )
 
-select
-    product_id,
+select 
+    product_id, 
     product_name,
-    orders as total_orders,
-    case
-        when total_orders=max(total_orders) then 'best_product'
-        when total_orders=min(total_orders) then 'least_product'
-    end as "best and least products"
-from product where order_rank=max(order_rank) and order_rank=min(order_rank)
+    total_orders,
+    CASE
+        WHEN order_rank = 1 THEN 'Best Product'
+        ELSE 'Least product'
+    END AS "best and least products"
+    FROM final

@@ -1,11 +1,11 @@
-with delivery as(
-    select 
-        p.product_id,
-        p.product_name,
-        avg(o.delivery_days) as delivery_days
-    from BIKE_SHOP_PREPERATION.prep_products as p left join BIKE_SHOP_PREPERATION.order_items as oi on p.product_id=oi.product_id
-    left join BIKE_SHOP_PREPERATION.prep_orders as o on oi.order_id=o.order_id where o.order_status=4
-    group by p.product_id, p.product_name, o.delivery_days
+with delivery AS(
+    SELECT 
+        P.product_id,
+        P.product_name,
+        AVG(O.delivery_days) AS delivery_days
+    FROM {{ ref('dim_products') }} AS P left join {{ ref('fact_order_items') }} AS OI ON P.product_id=oi.product_id
+    left join {{ ref('dim_orders') }} AS O ON OI.order_id=O.order_id WHERE O.order_status=4
+    GROUP BY P.product_id, p.product_name, o.delivery_days
 )
 
-select * from delivery
+SELECT * FROM delivery

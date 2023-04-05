@@ -1,0 +1,15 @@
+version: 2
+
+sources:
+  - name: training
+    database: sandbox
+    tables:
+      - name: customers
+      - name: orders
+      - name: order_items
+      - name: staff
+      - name: stocks
+      - name: brands
+      - name: products
+      - name: category
+      - name: stores

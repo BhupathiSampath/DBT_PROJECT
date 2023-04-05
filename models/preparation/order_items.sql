@@ -1,20 +1,14 @@
-{{
-  config(
-    materialized='table'
-  )
-}}
-
-with order_item as(
+WITH order_item AS(
     select
-        CAST(order_id as VARCHAR)  as order_id,
-        CAST(product_id as VARCHAR)  as product_id,
-        CAST(item_id as VARCHAR)  as item_id,
+        CAST(order_id AS VARCHAR)  AS order_id,
+        CAST(product_id AS VARCHAR)  AS product_id,
+        CAST(item_id AS VARCHAR)  AS item_id,
         discount,
         quantity,
         list_price,
-        (quantity*list_price) as total_price,
-        total_price-(total_price*discount) as revenue
-    from dbt_exercise.bike_shop.order_items
+        (quantity*list_price) AS total_price,
+        total_price-(total_price*discount) AS revenue
+    FROM  {{ source('training','order_items')}}
 )
 
-select * from order_item
+SELECT  * FROM  order_item

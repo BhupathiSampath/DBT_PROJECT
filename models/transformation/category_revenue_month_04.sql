@@ -1,11 +1,13 @@
-with revenue as(
-    select 
-        c.category_name, to_char(date_trunc('month', o.order_date), 'Mon') AS month_name,
-        date_part('year', o.order_date) AS year,
-        sum(oi.revenue) as revenue from BIKE_SHOP_PREPERATION.prep_category as c 
-        left join BIKE_SHOP_PREPERATION.prep_products as p on c.category_id=p.category_id left join 
-        BIKE_SHOP_PREPERATION.order_items as oi on p.product_id=oi.product_id left join 
-        BIKE_SHOP_PREPERATION.prep_orders as o on oi.order_id=o.order_id
-        group by c.category_name, o.order_date
+WITH revenue AS(
+    SELECT 
+        C.category_name, 
+        to_char(date_trunc('month', O.order_date), 'Mon') AS month_name,
+        date_part('year', O.order_date) ASyear,
+        SUM(OI.revenue) AS revenue 
+        FROM {{ ref('dim_categories') }} AS C 
+        LEFT JOIN {{ ref('dim_products') }} AS P ON c.category_id=P.category_id 
+        LEFT JOIN {{ ref('fact_order_items') }} AS OI ON p.product_id=OI.product_id 
+        LEFT JOIN {{ ref('dim_orders') }} AS O ON OI.order_id=O.order_id
+        GROUP BY C.category_name, O.order_date
 )
-select * from revenue
+SELECT * FROM revenue

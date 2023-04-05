@@ -1,54 +1,53 @@
-with customer_cohort as (
-    select
-        c.customer_id,
-        min(o.order_date) as first_order_date
-    from
-        BIKE_SHOP_PREPERATION.prep_customers as c join 
-        BIKE_SHOP_PREPERATION.prep_orders as o on c.customer_id=o.customer_id
-    group by
-        c.customer_id
+with customer_cohort AS (
+    SELECT
+        C.customer_id,
+        min(O.order_date) AS first_order_date
+    FROM
+        {{ ref('dim_customers') }} AS C join 
+        {{ ref('dim_orders') }} AS O ON C.customer_id=O.customer_id
+    GROUP BY
+        C.customer_id
 ),
 
-customer_stats as (
-    select
-        c.customer_id,
-        sum(oi.revenue) as total_spent,
-        case
-            -- when o.order_date >= dateadd(year, -10, max(o.order_date)) then 1
-            when o.order_date >= '2018-01-01' then 1
-            else 0
-        end as is_new_customer
-    from
-        BIKE_SHOP_PREPERATION.prep_customers as c join BIKE_SHOP_PREPERATION.prep_orders as o 
-        on c.customer_id=o.customer_id join order_items as oi on 
-        o.order_id=oi.order_id
-    group by
-        c.customer_id, o.order_date
+customer_stats AS (
+    SELECT
+        C.customer_id,
+        SUM(OI.revenue) AS total_spent,
+        CASE
+            WHEN O.order_date >= '2018-01-01' THEN 1
+            ELSE 0
+        END AS is_new_customer
+    FROM
+        {{ ref('dim_customers') }} AS C join {{ ref('dim_orders') }} AS O 
+        ON C.customer_id=O.customer_id join {{ ref('fact_order_items') }} AS OI ON 
+        O.order_id=OI.order_id
+    GROUP BY
+        C.customer_id, O.order_date
 ),
 
-new_customer_stats as (
-    select
-        sum(total_spent) as new_customer_revenue,
-        count(distinct customer_id) as num_new_customers
-    from
+new_customer_stats AS (
+    SELECT
+        sum(total_spent) AS new_customer_revenue,
+        count(distinct customer_id) AS num_new_customers
+    FROM
         customer_stats
     where
         is_new_customer = 1
 ),
 
-all_customer_stats as (
-    select
-        sum(total_spent) as total_revenue,
-        count(distinct customer_id) as num_customers
-    from
+all_customer_stats AS (
+    SELECT
+        sum(total_spent) AS total_revenue,
+        count(distinct customer_id) AS num_customers
+    FROM
         customer_stats
 )
 
-select
+SELECT
     num_new_customers , num_customers,
-    num_new_customers / cast(num_customers as float) as proportion_new_customers,
+    num_new_customers / cast(num_customers AS float) AS proportion_new_customers,
     new_customer_revenue ,total_revenue,
-    new_customer_revenue / total_revenue as proportion_new_customer_revenue
-from
+    new_customer_revenue / total_revenue AS proportion_new_customer_revenue
+FROM
     new_customer_stats
     cross join all_customer_stats

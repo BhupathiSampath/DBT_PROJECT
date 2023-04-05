@@ -1,9 +1,9 @@
-with store_revenue as(
-    select s.store_id, s.store_name, sum(oi.revenue) as revenue
-    from BIKE_SHOP_PREPERATION.prep_store as s left join BIKE_SHOP_PREPERATION.prep_orders as o
-    on s.store_id=o.store_id left join BIKE_SHOP_PREPERATION.order_items as oi on 
-    o.order_id=oi.order_id
-    group by s.store_id, s.store_name order by revenue desc
+WITH store_revenue AS (
+    SELECT S.store_id, S.store_name, sum(OI.revenue) AS revenue
+    FROM {{ ref('dim_stores') }} AS S LEFT JOIN {{ ref('dim_orders') }} AS O
+    ON S.store_id=O.store_id LEFT JOIN {{ ref('fact_order_items') }} AS OI ON 
+    O.order_id=OI.order_id
+    GROUP BY S.store_id, S.store_name ORDER BY revenue DESC
 )
 
-select * from store_revenue
+SELECT * FROM store_revenue

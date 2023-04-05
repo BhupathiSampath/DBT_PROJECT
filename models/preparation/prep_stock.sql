@@ -1,16 +1,10 @@
-{{
-  config(
-    materialized='table'
-  )
-}}
-
-with stock as(
-    select 
-        cast(product_id as varchar) as product_id,
-        cast(store_id as varchar) as store_id,
+WITH stock AS(
+    SELECT 
+        CAST(product_id AS VARCHAR) AS product_id,
+        CAST(store_id AS VARCHAR) AS store_id,
         quantity
-    from dbt_exercise.bike_shop.stocks
+    FROM {{ source('training','stocks') }}
 )
 
-select * from stock
+SELECT * FROM stock
 
