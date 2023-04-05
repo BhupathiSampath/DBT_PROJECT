@@ -12,5 +12,9 @@ models:
       description: "This is 4th KPI that shows How much revenue is generated each month, based on product category"
     - name: interplay_revenue_discounts_05
       description: "This is 5th KPI that shows that What is the overall effect of the discounted prices on revenue? (i.e. what’s the interplay between reduced prices and increased orders due to those reduced prices?)"
-    - name: staff_performance
-      description: 
+    - name: staff_performance_06
+      description: "This is the part of 6th KPI that shows which staff is bringing more revenue into business."
+    - name: store_revenue_06
+      description: "This is the part of 6th KPI that shows which store is generating more revenue into business."
+    - name: most_least_product_01
+      description: "This is the part of 6th KPI that shows which is most selling product and least selling product."
